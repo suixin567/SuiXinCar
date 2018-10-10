@@ -1,3 +1,4 @@
+# coding=UTF-8
 __author__ = 'zhengwang'
 
 import sys
@@ -39,7 +40,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
     nn.load_model("saved_model/nn_model.xml")
 
     obj_detection = ObjectDetection()
-    #鍒濆鍖栧皬杞?    rc_car = RCTest()
+    rc_car = RCTest()
 
     # cascade classifiers
     stop_cascade = cv2.CascadeClassifier("cascade_xml/stop_sign.xml")
@@ -151,7 +152,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
-                        self.rc_car.exit()#关闭小车控制
+                        self.rc_car.exit()#鹿脴卤脮脨隆鲁碌驴脴脰脝
                         break
         finally:
             cv2.destroyAllWindows()
@@ -180,7 +181,7 @@ class Server(object):
 
 
 if __name__ == '__main__':
-    h, p1, p2 = "192.168.1.100", 8000, 8002
+    h, p1, p2 = "192.168.0.103", 8000, 8002
 
     ts = Server(h, p1, p2)
     ts.start()

@@ -1,3 +1,4 @@
+# coding=UTF-8
 __author__ = 'zhengwang'
 
 import cv2
