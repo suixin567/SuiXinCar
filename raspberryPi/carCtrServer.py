@@ -8,10 +8,7 @@ IN1 = 17
 IN2 = 18
 IN3 = 27
 IN4 = 22
-<<<<<<< HEAD
 LIGHT = 21
-=======
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
 
 SLEEP=0.05
 
@@ -21,10 +18,7 @@ def init():
         GPIO.setup(IN2,GPIO.OUT)
         GPIO.setup(IN3,GPIO.OUT)
         GPIO.setup(IN4,GPIO.OUT)
-<<<<<<< HEAD
         GPIO.setup(LIGHT,GPIO.OUT)
-=======
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
 
 def forward():
         GPIO.output(IN1,GPIO.HIGH)
@@ -98,19 +92,12 @@ def stop():
         GPIO.output(IN2,GPIO.LOW)
         GPIO.output(IN3,GPIO.LOW)
         GPIO.output(IN4,GPIO.LOW)
-<<<<<<< HEAD
         GPIO.output(LIGHT,GPIO.LOW)
-=======
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
         
         
 sock_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-<<<<<<< HEAD
 sock_server.bind(('192.168.0.105', 8003))
-=======
-sock_server.bind(('192.168.0.104', 8003))
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
 sock_server.listen(0)# 开始监听，1代表在允许有一个连接排队，更多的新连接连进来时就会被拒绝
 print('starting...')
 init()
@@ -124,10 +111,7 @@ while True:
             #sensor_data = float(data.decode('gbk'))
             command = data.decode('gbk')
             print(command)
-<<<<<<< HEAD
             GPIO.output(LIGHT,GPIO.HIGH)
-=======
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
             if command =="Forward":
                  forward()
             if command =="Reverse":

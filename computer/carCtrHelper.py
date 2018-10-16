@@ -12,19 +12,18 @@ class RCTest(object):
         print("helper init...")      
 
     def steer(self, prediction):
-                    #print(prediction)
                     # simple orders
                     if prediction==2:
-                        #print("Forward")
+                        print("Forward")
                         self.client.send("Forward")  
                     elif prediction==0:
-                        #print("Left")
+                        print("Left")
                         self.client.send("Left")
                     elif prediction==1:
-                        #print("Right")
+                        print("Right")
                         self.client.send("Right")                 
                     else:
-                        #print("Stop")
+                        print("Stop")
                         self.client.send("Stop")
     def exit(self):
         self.client.close()
@@ -37,7 +36,7 @@ class Client(object):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port1))
     def send(self,msg):
-        #print("send")
+        print("send")
         self.client.send(msg.encode('GBK'))
     # 第一步：先收报头
         header = self.client.recv(4)

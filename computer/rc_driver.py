@@ -4,7 +4,7 @@ import sys
 import threading
 import socketserver
 import numpy as np
-import time
+
 
 from model import NeuralNetwork
 from rc_driver_helper import *
@@ -62,7 +62,6 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
 
         try:
             # stream video frames one by one
-            tempCount=0
             while True:
                 stream_bytes += self.rfile.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
@@ -71,10 +70,25 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                     jpg = stream_bytes[first:last + 2]
                     stream_bytes = stream_bytes[last + 2:]
                     gray = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
-                    #image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
-                    cv2.imshow('image', gray)
+                    image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
+
+                    # lower half of the image
+                    height, width = gray.shape
+                    roi = gray[int(height/2):height, :]
+
+                    # object detection
+                    v_param1 = self.obj_detection.detect(self.stop_cascade, gray, image)
+                    v_param2 = self.obj_detection.detect(self.light_cascade, gray, image)
+
+                    # distance measurement
+                    if v_param1 > 0 or v_param2 > 0:
+                        d1 = self.d_to_camera.calculate(v_param1, self.h1, 300, image)
+                        d2 = self.d_to_camera.calculate(v_param2, self.h2, 100, image)
+                        self.d_stop_sign = d1
+                        self.d_light = d2
+
+                    cv2.imshow('image', image)
                     # cv2.imshow('mlp_image', roi)
-<<<<<<< HEAD
 
                     # reshape image
                     image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
@@ -127,31 +141,10 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                     else:
                         print(prediction)
                       #  self.rc_car.steer(prediction)
-=======
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                            print("car stopped")
-                            self.rc_car.exit()
-                            break       
-                    tempCount=tempCount+1
-                    #print(tempCount)
-                    if tempCount>50:
-                        tempCount=0
-                        # lower half of the image
-                        height, width = gray.shape
-                        roi = gray[int(height/2):height, :]
-                        # reshape image
-                        image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
-    
-                        # neural network makes prediction
-                        prediction = self.nn.predict(image_array)
-                        print(prediction)
-                        self.rc_car.steer(prediction)
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
                         self.stop_start = cv2.getTickCount()
                         self.d_stop_sign = 25
-    
+
                         if stop_sign_active is False:
-<<<<<<< HEAD
                             self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
                             if self.drive_time_after_stop > 5:
                                 stop_sign_active = True
@@ -160,13 +153,6 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                         print("car stopped")
                       #  self.rc_car.stop()
                         break
-=======
-                                self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
-                                if self.drive_time_after_stop > 5:
-                                    stop_sign_active = True
-    
-                       
->>>>>>> f102b6e05296ad6cd3e4dee6c924664ffbd8bba6
         finally:
             cv2.destroyAllWindows()
             sys.exit()
