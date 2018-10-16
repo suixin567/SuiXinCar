@@ -1,3 +1,4 @@
+# coding=UTF-8
 import socket
 import struct
 import pygame
@@ -72,13 +73,13 @@ class Client(object):
     # 第二步：从报头中解析出对真实数据的描述信息（数据的长度）
         total_size = struct.unpack('i',header)[0]
     #print('total_size',total_size)
-    # 第三步：接收真实的数据
+    # 第三步：接收真实的数�?
         recv_size = 0
         recv_data = b''
         while recv_size < total_size:
             data = self.client.recv(1024) # 接收数据
             recv_data += data
-            recv_size += len(data)   # 不能加1024，如果加进度条，会计算有误
+            recv_size += len(data)   # 不能�?024，如果加进度条，会计算有�?
         #print('resive', recv_data.decode('gbk', 'ignore')) 
     def close():
         self.client.close()
@@ -89,7 +90,7 @@ class Client(object):
 if __name__ == '__main__':
     global client
     print("client start...")
-    h, p1= "192.168.0.104", 8003
+    h, p1= "192.168.0.105", 8003
     client = Client(h,p1)
     RCTest()
    # RCTest()

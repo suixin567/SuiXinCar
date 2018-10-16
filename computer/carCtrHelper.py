@@ -7,7 +7,7 @@ class RCTest(object):
 
     def __init__(self):
         global client        
-        h, p1= "192.168.0.104", 8003
+        h, p1= "192.168.0.105", 8003
         self.client = Client(h,p1)
         print("helper init...")      
 

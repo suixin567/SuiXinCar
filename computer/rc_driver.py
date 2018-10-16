@@ -1,4 +1,3 @@
-# coding=UTF-8
 __author__ = 'zhengwang'
 
 import sys
@@ -9,7 +8,6 @@ import numpy as np
 
 from model import NeuralNetwork
 from rc_driver_helper import *
-from carCtrHelper import RCTest
 
 # distance data measured by ultrasonic sensor
 sensor_data = None
@@ -40,7 +38,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
     nn.load_model("saved_model/nn_model.xml")
 
     obj_detection = ObjectDetection()
-    rc_car = RCTest()
+    #rc_car = RCControl("/dev/tty.usbmodem1421") 
 
     # cascade classifiers
     stop_cascade = cv2.CascadeClassifier("cascade_xml/stop_sign.xml")
@@ -101,12 +99,12 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                     # stop conditions
                     if sensor_data and int(sensor_data) < 30:
                         print("Stop, obstacle in front")
-                        self.rc_car.steer(-1)
+                        #self.rc_car.stop()
                         sensor_data = None
 
                     elif 0 < self.d_stop_sign < 25 and stop_sign_active:
                         print("Stop sign ahead")
-                        self.rc_car.steer(-1)
+                       # self.rc_car.stop()
 
                         # stop for 5 seconds
                         if stop_flag is False:
@@ -127,7 +125,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                         # print("Traffic light ahead")
                         if self.obj_detection.red_light:
                             print("Red light")
-                            self.rc_car.steer(-1)
+                          #  self.rc_car.stop()
                         elif self.obj_detection.green_light:
                             print("Green light")
                             pass
@@ -141,7 +139,8 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                         self.obj_detection.yellow_light = False
 
                     else:
-                        self.rc_car.steer(prediction)
+                        print(prediction)
+                      #  self.rc_car.steer(prediction)
                         self.stop_start = cv2.getTickCount()
                         self.d_stop_sign = 25
 
@@ -152,7 +151,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
-                        self.rc_car.exit()#¹Ø±ÕÐ¡³µ¿ØÖÆ
+                      #  self.rc_car.stop()
                         break
         finally:
             cv2.destroyAllWindows()
@@ -181,7 +180,7 @@ class Server(object):
 
 
 if __name__ == '__main__':
-    h, p1, p2 = "192.168.0.103", 8000, 8002
+    h, p1, p2 = "192.168.0.104", 8000, 8002
 
     ts = Server(h, p1, p2)
     ts.start()

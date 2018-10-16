@@ -1,4 +1,4 @@
-__author__ = 'zhengwang'
+__author__ = 'suixin'
 
 import cv2
 import math
