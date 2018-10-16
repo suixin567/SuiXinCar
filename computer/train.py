@@ -11,7 +11,7 @@ set_random_seed(20)
 
 
 
-num_iteration=8000
+num_iteration=2000
 classes = ['forward','left','right']
 num_classes = len(classes)
 batch_size = 32
