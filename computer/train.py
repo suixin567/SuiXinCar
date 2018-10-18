@@ -12,7 +12,7 @@ set_random_seed(20)
 
 
 num_iteration=2000
-classes = ['forward','left','right']
+classes = ['forward','left']
 num_classes = len(classes)
 batch_size = 32
 validation_size = 0.2#验证集 占20%

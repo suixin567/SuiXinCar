@@ -6,7 +6,7 @@ import pygame
 from pygame.locals import *
 import socket
 import time
-
+from carCtrHelper import RCTest
 
 class CollectTrainingData(object):
     
@@ -19,7 +19,8 @@ class CollectTrainingData(object):
         # accept a single connection
         self.connection = self.server_socket.accept()[0].makefile('rb')
         # connect to a seral port
-       
+        print("准备初始化car")
+        self.car = RCTest()
         pygame.init()
         pygame.display.set_mode((250, 250))
         self.send_inst = True
@@ -59,6 +60,7 @@ class CollectTrainingData(object):
                                 saved_frame += 1
                                 path ="./train_data/forward/" + str(int(time.time())) + ".jpg"
                                 res = cv2.imwrite(path, image)
+                                self.car.steer(0)
                                 print("保存forward图片",res,path)
                             elif key_input[pygame.K_DOWN]:
                                 print("Reverse")
@@ -66,11 +68,13 @@ class CollectTrainingData(object):
                                 saved_frame += 1
                                 path ="./train_data/left/" + str(int(time.time())) + ".jpg"
                                 res = cv2.imwrite(path, image)
+                                self.car.steer(1)
                                 print("保存left图片",res,path)
                             elif key_input[pygame.K_RIGHT]:
                                 saved_frame += 1   
                                 path ="./train_data/right/" + str(int(time.time())) + ".jpg"
                                 res = cv2.imwrite(path, image)
+                                self.car.steer(2)
                                 print("保存right图片",res,path)
                             elif key_input[pygame.K_x] or key_input[pygame.K_q]:
                                 print("exit")

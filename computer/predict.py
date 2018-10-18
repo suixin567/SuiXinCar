@@ -4,10 +4,10 @@ import os,glob,cv2
 import sys,argparse
 
 
-class_num=3#分类数
+class_num=2#分类数
 image_size=64
 num_channels=3
-model_name = '1450'
+model_name = '1976'
 
 sess = tf.Session()
 saver = tf.train.import_meta_graph('./model/car.ckpt-'+model_name+'.meta')
@@ -27,7 +27,7 @@ def predict(x_batch):
 
 
 if __name__ == '__main__':
-    for text_name in range(1,46):
+    for text_name in range(1,31):
         images = []
         filename = './test_images/'+str(text_name)+'.jpg'
         print(filename)
